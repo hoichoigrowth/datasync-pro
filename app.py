@@ -421,7 +421,7 @@ with col1:
 
         with process_col1:
             st.subheader("Upload Data")
-            uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+            uploaded_file = st.file_uploader("Choose a CSV or Excel file", type=["csv", "xlsx", "xls"])
 
             use_sample_data = st.checkbox("Use sample data instead")
 
@@ -433,7 +433,10 @@ with col1:
 
             if uploaded_file is not None:
                 try:
-                    input_df = pd.read_csv(uploaded_file)
+                    if uploaded_file.name.endswith('.csv'):
+                        input_df = pd.read_csv(uploaded_file)
+                    else:
+                        input_df = pd.read_excel(uploaded_file)
                     st.session_state['input_df'] = input_df
                     st.success(f"Successfully uploaded {len(input_df)} records")
                 except Exception as e:
